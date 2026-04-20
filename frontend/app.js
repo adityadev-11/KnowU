@@ -3,6 +3,96 @@
    ============================================ */
 
 // ──────────────────────────────────────────────
+// AUTHENTICATION
+// ──────────────────────────────────────────────
+const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+  ? 'http://localhost:8080/api/v1' 
+  : '/api/v1';
+
+let currentUser = JSON.parse(localStorage.getItem('knowu_user') || 'null');
+
+function toggleAuthMode(mode) {
+  if (mode === 'register') {
+    document.getElementById('login-form').classList.add('hidden');
+    document.getElementById('register-form').classList.remove('hidden');
+  } else {
+    document.getElementById('register-form').classList.add('hidden');
+    document.getElementById('login-form').classList.remove('hidden');
+  }
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+  const btn = document.getElementById('login-btn');
+  const err = document.getElementById('login-error');
+  btn.classList.add('loading');
+  err.classList.add('hidden');
+
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+
+  try {
+    const res = await fetch(`${API_URL}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    
+    if (!res.ok) throw new Error(data.error || 'Login failed');
+    
+    currentUser = data;
+    localStorage.setItem('knowu_user', JSON.stringify(currentUser));
+    initApp();
+  } catch (error) {
+    err.textContent = error.message;
+    err.classList.remove('hidden');
+  } finally {
+    btn.classList.remove('loading');
+  }
+}
+
+async function handleRegister(e) {
+  e.preventDefault();
+  const btn = document.getElementById('register-btn');
+  const err = document.getElementById('register-error');
+  btn.classList.add('loading');
+  err.classList.add('hidden');
+
+  const name = document.getElementById('register-name').value;
+  const email = document.getElementById('register-email').value;
+  const password = document.getElementById('register-password').value;
+
+  try {
+    const res = await fetch(`${API_URL}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password })
+    });
+    const data = await res.json();
+    
+    if (!res.ok) throw new Error(data.error || 'Registration failed');
+    
+    currentUser = data;
+    localStorage.setItem('knowu_user', JSON.stringify(currentUser));
+    initApp();
+  } catch (error) {
+    err.textContent = error.message;
+    err.classList.remove('hidden');
+  } finally {
+    btn.classList.remove('loading');
+  }
+}
+
+function handleLogout() {
+  localStorage.removeItem('knowu_user');
+  currentUser = null;
+  document.getElementById('app-wrapper').classList.add('hidden');
+  document.getElementById('auth-screen').classList.remove('hidden');
+  document.getElementById('login-password').value = '';
+}
+
+// ──────────────────────────────────────────────
 // NAVIGATION
 // ──────────────────────────────────────────────
 const breadcrumbs = {
@@ -364,13 +454,15 @@ function renderNotifications() {
   list.innerHTML = notifications.map(n => `
     <div class="notif-item">
       <div class="notif-icon" style="background:${n.color}20;color:${n.color}">
-        <i class="${n.icon}"></i>
-      </div>
-      <div class="notif-body">
-        <div class="notif-title">${n.title}</div>
-        <div class="notif-desc">${n.desc}</div>
-      </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+        <div class="sidebar-user">
+    <div class="user-avatar" id="sidebar-avatar">AK</div>
+    <div class="user-info">
+      <div class="user-name" id="sidebar-name">Admin Kumar</div>
+      <div class="user-role" id="sidebar-role">Super Admin</div>
+    </div>
+    <i class="fas fa-sign-out-alt logout-icon" onclick="handleLogout()"></i>
+  </div>
+</aside>ms:flex-end;gap:6px">
         <div class="notif-time">${n.time}</div>
         ${n.unread ? '<div class="notif-dot"></div>' : ''}
       </div>
@@ -415,9 +507,123 @@ function startClock() {
 }
 
 // ──────────────────────────────────────────────
+// ADMIN TERMINAL
+// ──────────────────────────────────────────────
+async function handleTerminalKey(e) {
+  if (e.key === 'Enter') {
+    const input = e.target.value.trim();
+    if (!input) return;
+    e.target.value = '';
+    appendTerminal(`admin@knowu:~$ ${input}`);
+    await processCommand(input);
+  }
+}
+
+function appendTerminal(text, isHtml = false) {
+  const out = document.getElementById('terminal-output');
+  const div = document.createElement('div');
+  div.style.marginBottom = '6px';
+  if (isHtml) div.innerHTML = text;
+  else div.textContent = text;
+  out.appendChild(div);
+  document.getElementById('terminal-body').scrollTop = out.scrollHeight;
+}
+
+function clearTerminal() {
+  document.getElementById('terminal-output').innerHTML = '';
+}
+
+async function processCommand(cmdRaw) {
+  const cmd = cmdRaw.toLowerCase();
+  
+  if (cmd === 'clear') { clearTerminal(); return; }
+  if (cmd === 'help') {
+    appendTerminal(`Available commands:
+  - help : show this message
+  - users : list all users
+  - delete user <id> : delete a specific user
+  - stats : show system statistics
+  - whoami : show current session user`, false);
+    return;
+  }
+  if (cmd === 'whoami') {
+    appendTerminal(`Current user: ${currentUser?.name} (${currentUser?.email}) - Role: ${currentUser?.role}`);
+    return;
+  }
+
+  // API Commands
+  try {
+    if (cmd === 'stats') {
+      appendTerminal('Fetching system stats...');
+      const res = await fetch(`${API_URL}/admin/system-stats`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to fetch');
+      appendTerminal(JSON.stringify(data, null, 2).replace(/\n/g, '<br>').replace(/ /g, '&nbsp;'), true);
+    } 
+    else if (cmd === 'users') {
+      appendTerminal('Fetching users...');
+      const res = await fetch(`${API_URL}/admin/users`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to fetch');
+      
+      let table = `<table style="width:100%;text-align:left;border-collapse:collapse;margin-top:8px">
+        <tr style="border-bottom:1px solid #333;color:#888"><th>ID</th><th>Name</th><th>Email</th><th>Role</th></tr>`;
+      data.forEach(u => {
+        table += `<tr><td>${u.id}</td><td>${u.name}</td><td>${u.email}</td><td>${u.role}</td></tr>`;
+      });
+      table += `</table>`;
+      appendTerminal(table, true);
+    }
+    else if (cmd.startsWith('delete user ')) {
+      const id = cmd.split(' ')[2];
+      if (!id) throw new Error("Please specify an ID");
+      appendTerminal(`Attempting to delete user ${id}...`);
+      const res = await fetch(`${API_URL}/admin/users/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to delete');
+      appendTerminal(`Success: ${data.message}`);
+    }
+    else {
+      appendTerminal(`Command not found: ${cmdRaw}. Type 'help' for available commands.`);
+    }
+  } catch (err) {
+    appendTerminal(`<span style="color:#f43f5e">Error: ${err.message}</span>`, true);
+  }
+}
+
+// ──────────────────────────────────────────────
 // INIT
 // ──────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  if (currentUser) {
+    initApp();
+  } else {
+    document.getElementById('app-wrapper').classList.add('hidden');
+    document.getElementById('auth-screen').classList.remove('hidden');
+  }
+});
+
+function initApp() {
+  document.getElementById('auth-screen').classList.add('hidden');
+  document.getElementById('app-wrapper').classList.remove('hidden');
+
+  // Set user info
+  const initials = currentUser.name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+  document.querySelectorAll('.topbar-avatar').forEach(el => el.textContent = initials);
+  const sideAvatar = document.getElementById('sidebar-avatar');
+  if(sideAvatar) sideAvatar.textContent = initials;
+  const sideName = document.getElementById('sidebar-name');
+  if(sideName) sideName.textContent = currentUser.name;
+  const sideRole = document.getElementById('sidebar-role');
+  if(sideRole) sideRole.textContent = currentUser.role;
+
+  // Toggle admin features
+  if (currentUser.role === 'ADMIN') {
+    document.querySelectorAll('.admin-only-nav').forEach(el => el.style.display = '');
+  } else {
+    document.querySelectorAll('.admin-only-nav').forEach(el => el.style.display = 'none');
+  }
+
   renderStudentsTable();
   renderAttendanceTable();
   renderExamGrid();
@@ -428,13 +634,10 @@ document.addEventListener('DOMContentLoaded', () => {
   setAttDate();
   navigateTo('dashboard');
 
-  // Save attendance button feedback
+  // Button feedback setup
   document.querySelectorAll('.btn-primary').forEach(btn => {
     if (btn.textContent.trim().includes('Save Attendance')) {
       btn.addEventListener('click', () => showToast('✅ Attendance saved successfully!'));
-    }
-    if (btn.textContent.trim().includes('Add Student')) {
-      // handled by modal
     }
     if (btn.textContent.trim().includes('Save Changes')) {
       btn.addEventListener('click', () => showToast('✅ Settings saved!'));
@@ -444,7 +647,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Student search filter
+  // Search
   const searchInput = document.querySelector('.table-search');
   if (searchInput) {
     searchInput.addEventListener('input', () => {
@@ -454,4 +657,4 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
-});
+}

@@ -3,6 +3,7 @@ package com.knowu.config;
 import com.knowu.model.*;
 import com.knowu.repository.*;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -15,17 +16,35 @@ public class DataSeeder implements CommandLineRunner {
     private final SchoolClassRepository classRepo;
     private final StudentRepository     studentRepo;
     private final ExamRepository        examRepo;
+    private final UserRepository        userRepo;
+    private final PasswordEncoder       passwordEncoder;
 
     public DataSeeder(SchoolClassRepository classRepo,
                       StudentRepository studentRepo,
-                      ExamRepository examRepo) {
-        this.classRepo   = classRepo;
-        this.studentRepo = studentRepo;
-        this.examRepo    = examRepo;
+                      ExamRepository examRepo,
+                      UserRepository userRepo,
+                      PasswordEncoder passwordEncoder) {
+        this.classRepo       = classRepo;
+        this.studentRepo     = studentRepo;
+        this.examRepo        = examRepo;
+        this.userRepo        = userRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void run(String... args) {
+        // ── Seed default admin user ──
+        if (!userRepo.existsByEmail("admin@knowu.edu")) {
+            userRepo.save(new User(
+                "Admin Kumar",
+                "admin@knowu.edu",
+                passwordEncoder.encode("admin123"),
+                User.Role.ADMIN
+            ));
+            System.out.println("🔐 Default admin created: admin@knowu.edu / admin123");
+        }
+
+        // ── Seed sample data (only if empty) ──
         if (classRepo.count() > 0) return;
 
         System.out.println("🌱 Seeding KnowU sample data...");

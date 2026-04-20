@@ -10,6 +10,76 @@
 </head>
 <body>
 
+<!-- ========== AUTH SCREEN ========== -->
+<div class="auth-screen" id="auth-screen">
+  <div class="auth-bg-shapes">
+    <div class="auth-shape shape-1"></div>
+    <div class="auth-shape shape-2"></div>
+    <div class="auth-shape shape-3"></div>
+  </div>
+  <div class="auth-card" id="auth-card">
+    <div class="auth-brand">
+      <div class="auth-brand-icon"><i class="fas fa-graduation-cap"></i></div>
+      <h1>KnowU</h1>
+      <p>Student Management System</p>
+    </div>
+
+    <!-- Login Form -->
+    <form class="auth-form" id="login-form" onsubmit="handleLogin(event)">
+      <h2>Welcome Back</h2>
+      <p class="auth-subtitle">Sign in to your account</p>
+      <div class="auth-error hidden" id="login-error"></div>
+      <div class="auth-field">
+        <label><i class="fas fa-envelope"></i> Email</label>
+        <input type="email" id="login-email" placeholder="you@knowu.edu" required />
+      </div>
+      <div class="auth-field">
+        <label><i class="fas fa-lock"></i> Password</label>
+        <input type="password" id="login-password" placeholder="••••••••" required />
+      </div>
+      <button type="submit" class="auth-btn" id="login-btn">
+        <span>Sign In</span>
+        <i class="fas fa-arrow-right"></i>
+      </button>
+      <div class="auth-switch">
+        Don't have an account? <a href="#" onclick="toggleAuthMode('register')">Create one</a>
+      </div>
+      <div class="auth-hint">
+        <i class="fas fa-info-circle"></i> Admin: admin@knowu.edu / admin123
+      </div>
+    </form>
+
+    <!-- Register Form -->
+    <form class="auth-form hidden" id="register-form" onsubmit="handleRegister(event)">
+      <h2>Create Account</h2>
+      <p class="auth-subtitle">Join the KnowU platform</p>
+      <div class="auth-error hidden" id="register-error"></div>
+      <div class="auth-field">
+        <label><i class="fas fa-user"></i> Full Name</label>
+        <input type="text" id="register-name" placeholder="e.g. Rahul Kumar" required />
+      </div>
+      <div class="auth-field">
+        <label><i class="fas fa-envelope"></i> Email</label>
+        <input type="email" id="register-email" placeholder="you@knowu.edu" required />
+      </div>
+      <div class="auth-field">
+        <label><i class="fas fa-lock"></i> Password</label>
+        <input type="password" id="register-password" placeholder="Min 6 characters" required minlength="6" />
+      </div>
+      <button type="submit" class="auth-btn" id="register-btn">
+        <span>Create Account</span>
+        <i class="fas fa-user-plus"></i>
+      </button>
+      <div class="auth-switch">
+        Already have an account? <a href="#" onclick="toggleAuthMode('login')">Sign in</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ========== MAIN APP (hidden until logged in) ========== -->
+<div class="app-wrapper hidden" id="app-wrapper">
+
 <!-- Sidebar -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-brand">
@@ -57,6 +127,11 @@
     </a>
     <a class="nav-item" data-page="settings" onclick="navigateTo('settings')">
       <i class="fas fa-cog"></i><span>Settings</span>
+    </a>
+
+    <div class="nav-section-label admin-only-nav">Admin</div>
+    <a class="nav-item admin-only-nav" data-page="admin" onclick="navigateTo('admin')">
+      <i class="fas fa-terminal"></i><span>Admin Terminal</span>
     </a>
   </nav>
 
@@ -617,8 +692,52 @@
       </div>
     </section>
 
+    <!-- ========== ADMIN TERMINAL ========== -->
+    <section class="page" id="page-admin">
+      <div class="page-header">
+        <div><h1 class="page-title">Admin Terminal</h1><p class="page-subtitle">System administration console</p></div>
+        <div class="page-actions">
+          <span class="admin-role-badge"><i class="fas fa-shield-alt"></i> ADMIN ACCESS</span>
+        </div>
+      </div>
+
+      <div class="terminal-container">
+        <div class="terminal-header">
+          <div class="terminal-dots">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+          </div>
+          <div class="terminal-title">knowu@admin ~ terminal</div>
+          <div class="terminal-actions">
+            <button class="terminal-action-btn" onclick="clearTerminal()" title="Clear"><i class="fas fa-trash-alt"></i></button>
+          </div>
+        </div>
+        <div class="terminal-body" id="terminal-body">
+          <div class="terminal-output" id="terminal-output"></div>
+          <div class="terminal-input-line">
+            <span class="terminal-prompt">admin@knowu:~$</span>
+            <input type="text" class="terminal-input" id="terminal-input" placeholder="Type a command..." autocomplete="off" onkeydown="handleTerminalKey(event)" />
+          </div>
+        </div>
+      </div>
+
+      <div class="terminal-help card">
+        <div class="card-header"><h3><i class="fas fa-keyboard"></i> Available Commands</h3></div>
+        <div class="cmd-grid">
+          <div class="cmd-item"><code>help</code><span>Show all commands</span></div>
+          <div class="cmd-item"><code>users</code><span>List all registered users</span></div>
+          <div class="cmd-item"><code>stats</code><span>System statistics</span></div>
+          <div class="cmd-item"><code>delete user &lt;id&gt;</code><span>Delete a user by ID</span></div>
+          <div class="cmd-item"><code>whoami</code><span>Current logged-in user</span></div>
+          <div class="cmd-item"><code>clear</code><span>Clear terminal</span></div>
+        </div>
+      </div>
+    </section>
+
   </main>
 </div>
+</div> <!-- /app-wrapper -->
 
 <!-- Add Student Modal -->
 <div class="modal-overlay hidden" id="addStudentModal">

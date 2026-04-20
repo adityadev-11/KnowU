@@ -1,0 +1,23 @@
+# Build artifacts
+backend/target/
+*.class
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# Git
+.git/
+.gitignore
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Docs
+README.md

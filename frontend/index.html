@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KnowU – Student Management System</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-icon"><i class="fas fa-graduation-cap"></i></div>
+    <span class="brand-name">KnowU</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Main</div>
+    <a class="nav-item active" data-page="dashboard" onclick="navigateTo('dashboard')">
+      <i class="fas fa-th-large"></i><span>Dashboard</span>
+    </a>
+    <a class="nav-item" data-page="students" onclick="navigateTo('students')">
+      <i class="fas fa-user-graduate"></i><span>Students</span>
+    </a>
+    <a class="nav-item" data-page="attendance" onclick="navigateTo('attendance')">
+      <i class="fas fa-clipboard-check"></i><span>Attendance</span>
+    </a>
+
+    <div class="nav-section-label">Academics</div>
+    <a class="nav-item" data-page="exams" onclick="navigateTo('exams')">
+      <i class="fas fa-file-alt"></i><span>Exam Schedule</span>
+    </a>
+    <a class="nav-item" data-page="classes" onclick="navigateTo('classes')">
+      <i class="fas fa-calendar-alt"></i><span>Class Schedule</span>
+    </a>
+    <a class="nav-item" data-page="results" onclick="navigateTo('results')">
+      <i class="fas fa-chart-bar"></i><span>Results</span>
+    </a>
+
+    <div class="nav-section-label">Campus</div>
+    <a class="nav-item" data-page="cafeteria" onclick="navigateTo('cafeteria')">
+      <i class="fas fa-utensils"></i><span>Cafeteria</span>
+    </a>
+    <a class="nav-item" data-page="library" onclick="navigateTo('library')">
+      <i class="fas fa-book"></i><span>Library</span>
+    </a>
+    <a class="nav-item" data-page="fees" onclick="navigateTo('fees')">
+      <i class="fas fa-dollar-sign"></i><span>Fee Management</span>
+    </a>
+
+    <div class="nav-section-label">Settings</div>
+    <a class="nav-item" data-page="notifications" onclick="navigateTo('notifications')">
+      <i class="fas fa-bell"></i><span>Notifications</span>
+    </a>
+    <a class="nav-item" data-page="settings" onclick="navigateTo('settings')">
+      <i class="fas fa-cog"></i><span>Settings</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-user">
+    <div class="user-avatar">AK</div>
+    <div class="user-info">
+      <div class="user-name">Admin Kumar</div>
+      <div class="user-role">Super Admin</div>
+    </div>
+    <i class="fas fa-sign-out-alt logout-icon"></i>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<div class="main-wrapper">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="breadcrumb" id="breadcrumb">Dashboard</div>
+    </div>
+    <div class="topbar-right">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Search students, classes..."/>
+      </div>
+      <div class="topbar-icon notif-btn" onclick="navigateTo('notifications')">
+        <i class="fas fa-bell"></i>
+        <span class="badge">4</span>
+      </div>
+      <div class="topbar-icon">
+        <i class="fas fa-expand"></i>
+      </div>
+      <div class="topbar-avatar">AK</div>
+    </div>
+  </header>
+
+  <!-- Pages -->
+  <main class="content" id="content">
+
+    <!-- ========== DASHBOARD ========== -->
+    <section class="page active" id="page-dashboard">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Good Morning, Admin 👋</h1>
+          <p class="page-subtitle">Here's what's happening at your institution today.</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-outline"><i class="fas fa-download"></i> Export</button>
+          <button class="btn btn-primary"><i class="fas fa-plus"></i> Add Student</button>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card stat-blue">
+          <div class="stat-icon"><i class="fas fa-users"></i></div>
+          <div class="stat-content">
+            <div class="stat-value">2,481</div>
+            <div class="stat-label">Total Students</div>
+            <div class="stat-trend up"><i class="fas fa-arrow-up"></i> 12% this month</div>
+          </div>
+          <div class="stat-bg-shape"></div>
+        </div>
+        <div class="stat-card stat-green">
+          <div class="stat-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+          <div class="stat-content">
+            <div class="stat-value">148</div>
+            <div class="stat-label">Faculty Members</div>
+            <div class="stat-trend up"><i class="fas fa-arrow-up"></i> 3 new this week</div>
+          </div>
+          <div class="stat-bg-shape"></div>
+        </div>
+        <div class="stat-card stat-orange">
+          <div class="stat-icon"><i class="fas fa-clipboard-check"></i></div>
+          <div class="stat-content">
+            <div class="stat-value">94.2%</div>
+            <div class="stat-label">Avg Attendance</div>
+            <div class="stat-trend down"><i class="fas fa-arrow-down"></i> 1.5% vs last week</div>
+          </div>
+          <div class="stat-bg-shape"></div>
+        </div>
+        <div class="stat-card stat-purple">
+          <div class="stat-icon"><i class="fas fa-file-alt"></i></div>
+          <div class="stat-content">
+            <div class="stat-value">18</div>
+            <div class="stat-label">Exams Upcoming</div>
+            <div class="stat-trend up"><i class="fas fa-arrow-up"></i> Next in 3 days</div>
+          </div>
+          <div class="stat-bg-shape"></div>
+        </div>
+      </div>
+
+      <!-- Middle row -->
+      <div class="dashboard-mid">
+        <!-- Recent Students -->
+        <div class="card wide-card">
+          <div class="card-header">
+            <h3>Recent Enrollments</h3>
+            <button class="btn btn-sm" onclick="navigateTo('students')">View All</button>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr><th>Student</th><th>Class</th><th>Status</th><th>Joined</th><th></th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div class="student-cell"><div class="avatar-sm" style="background:#6366f1">RK</div><div><div class="s-name">Rahul Kumar</div><div class="s-id">#STU2481</div></div></div></td>
+                <td>XII – Science A</td>
+                <td><span class="badge-status green">Active</span></td>
+                <td>Mar 12, 2025</td>
+                <td><button class="btn-icon"><i class="fas fa-ellipsis-h"></i></button></td>
+              </tr>
+              <tr>
+                <td><div class="student-cell"><div class="avatar-sm" style="background:#f43f5e">PS</div><div><div class="s-name">Priya Sharma</div><div class="s-id">#STU2480</div></div></div></td>
+                <td>XI – Commerce B</td>
+                <td><span class="badge-status green">Active</span></td>
+                <td>Mar 10, 2025</td>
+                <td><button class="btn-icon"><i class="fas fa-ellipsis-h"></i></button></td>
+              </tr>
+              <tr>
+                <td><div class="student-cell"><div class="avatar-sm" style="background:#0ea5e9">AM</div><div><div class="s-name">Arjun Mehta</div><div class="s-id">#STU2479</div></div></div></td>
+                <td>X – Arts</td>
+                <td><span class="badge-status yellow">Pending</span></td>
+                <td>Mar 9, 2025</td>
+                <td><button class="btn-icon"><i class="fas fa-ellipsis-h"></i></button></td>
+              </tr>
+              <tr>
+                <td><div class="student-cell"><div class="avatar-sm" style="background:#10b981">SG</div><div><div class="s-name">Sneha Gupta</div><div class="s-id">#STU2478</div></div></div></td>
+                <td>XII – Science B</td>
+                <td><span class="badge-status green">Active</span></td>
+                <td>Mar 7, 2025</td>
+                <td><button class="btn-icon"><i class="fas fa-ellipsis-h"></i></button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Today's Events -->
+        <div class="card narrow-card">
+          <div class="card-header">
+            <h3>Today's Events</h3>
+            <span class="today-date" id="today-date"></span>
+          </div>
+          <div class="events-list">
+            <div class="event-item ev-blue">
+              <div class="ev-time">08:30</div>
+              <div class="ev-detail"><div class="ev-title">Morning Assembly</div><div class="ev-sub">Main Hall</div></div>
+            </div>
+            <div class="event-item ev-purple">
+              <div class="ev-time">10:00</div>
+              <div class="ev-detail"><div class="ev-title">Physics Lab – XII A</div><div class="ev-sub">Lab Block 2</div></div>
+            </div>
+            <div class="event-item ev-orange">
+              <div class="ev-time">12:30</div>
+              <div class="ev-detail"><div class="ev-title">Lunch Break</div><div class="ev-sub">Cafeteria</div></div>
+            </div>
+            <div class="event-item ev-green">
+              <div class="ev-time">14:00</div>
+              <div class="ev-detail"><div class="ev-title">Math Mock Test – X</div><div class="ev-sub">Room 204</div></div>
+            </div>
+            <div class="event-item ev-red">
+              <div class="ev-time">16:30</div>
+              <div class="ev-detail"><div class="ev-title">Parent-Teacher Meeting</div><div class="ev-sub">Conference Hall</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom row -->
+      <div class="dashboard-bottom">
+        <div class="card">
+          <div class="card-header"><h3>Attendance Overview</h3><span class="chip">This Week</span></div>
+          <div class="attendance-bars">
+            <div class="att-bar-row" data-label="Mon" data-val="97"><div class="att-label">Mon</div><div class="att-track"><div class="att-fill" style="width:97%;background:#6366f1"></div></div><div class="att-pct">97%</div></div>
+            <div class="att-bar-row" data-label="Tue" data-val="94"><div class="att-label">Tue</div><div class="att-track"><div class="att-fill" style="width:94%;background:#6366f1"></div></div><div class="att-pct">94%</div></div>
+            <div class="att-bar-row" data-label="Wed" data-val="91"><div class="att-label">Wed</div><div class="att-track"><div class="att-fill" style="width:91%;background:#f59e0b"></div></div><div class="att-pct">91%</div></div>
+            <div class="att-bar-row" data-label="Thu" data-val="96"><div class="att-label">Thu</div><div class="att-track"><div class="att-fill" style="width:96%;background:#6366f1"></div></div><div class="att-pct">96%</div></div>
+            <div class="att-bar-row" data-label="Fri" data-val="88"><div class="att-label">Fri</div><div class="att-track"><div class="att-fill" style="width:88%;background:#f43f5e"></div></div><div class="att-pct">88%</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Fee Collection</h3><span class="chip">March 2025</span></div>
+          <div class="fee-summary">
+            <div class="fee-ring-wrap">
+              <svg viewBox="0 0 120 120" class="fee-ring">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#1e2d4a" stroke-width="12"/>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#6366f1" stroke-width="12" stroke-dasharray="219 314" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+              </svg>
+              <div class="fee-pct-label">69.7%</div>
+            </div>
+            <div class="fee-details">
+              <div class="fee-row"><span class="fee-dot" style="background:#6366f1"></span><span>Collected</span><strong>₹14.8L</strong></div>
+              <div class="fee-row"><span class="fee-dot" style="background:#1e2d4a"></span><span>Pending</span><strong>₹6.4L</strong></div>
+              <div class="fee-row"><span class="fee-dot" style="background:#10b981"></span><span>Waived</span><strong>₹0.6L</strong></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Quick Actions</h3></div>
+          <div class="quick-grid">
+            <button class="quick-btn" onclick="navigateTo('students')"><i class="fas fa-user-plus"></i><span>Add Student</span></button>
+            <button class="quick-btn" onclick="navigateTo('attendance')"><i class="fas fa-clipboard-list"></i><span>Mark Attendance</span></button>
+            <button class="quick-btn" onclick="navigateTo('exams')"><i class="fas fa-calendar-plus"></i><span>Schedule Exam</span></button>
+            <button class="quick-btn" onclick="navigateTo('cafeteria')"><i class="fas fa-utensils"></i><span>Cafeteria Menu</span></button>
+            <button class="quick-btn" onclick="navigateTo('fees')"><i class="fas fa-receipt"></i><span>Fee Report</span></button>
+            <button class="quick-btn" onclick="navigateTo('library')"><i class="fas fa-book-open"></i><span>Library</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== STUDENTS ========== -->
+    <section class="page" id="page-students">
+      <div class="page-header">
+        <div><h1 class="page-title">Student Management</h1><p class="page-subtitle">Manage all enrolled students</p></div>
+        <div class="page-actions">
+          <button class="btn btn-outline"><i class="fas fa-filter"></i> Filter</button>
+          <button class="btn btn-primary" onclick="openModal('addStudentModal')"><i class="fas fa-plus"></i> Add Student</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="table-toolbar">
+          <input type="text" class="table-search" placeholder="🔍  Search by name, ID, class..."/>
+          <div class="table-filters">
+            <select class="select-sm"><option>All Classes</option><option>XII Science</option><option>XII Commerce</option><option>XI Science</option><option>X Arts</option></select>
+            <select class="select-sm"><option>All Status</option><option>Active</option><option>Pending</option><option>Suspended</option></select>
+          </div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th><input type="checkbox"/></th><th>Student</th><th>Roll No.</th><th>Class</th><th>Phone</th><th>Attendance</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="students-tbody">
+            <!-- Rows injected by JS -->
+          </tbody>
+        </table>
+        <div class="table-footer">
+          <span class="table-info">Showing 1–10 of 2,481</span>
+          <div class="pagination">
+            <button class="pg-btn"><i class="fas fa-chevron-left"></i></button>
+            <button class="pg-btn active">1</button>
+            <button class="pg-btn">2</button>
+            <button class="pg-btn">3</button>
+            <span>…</span>
+            <button class="pg-btn">248</button>
+            <button class="pg-btn"><i class="fas fa-chevron-right"></i></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== ATTENDANCE ========== -->
+    <section class="page" id="page-attendance">
+      <div class="page-header">
+        <div><h1 class="page-title">Attendance Management</h1><p class="page-subtitle">Track daily student presence</p></div>
+        <div class="page-actions">
+          <button class="btn btn-outline"><i class="fas fa-download"></i> Export CSV</button>
+          <button class="btn btn-primary"><i class="fas fa-save"></i> Save Attendance</button>
+        </div>
+      </div>
+
+      <div class="att-controls card">
+        <div class="att-control-row">
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" class="form-input" id="att-date"/>
+          </div>
+          <div class="form-group">
+            <label>Class</label>
+            <select class="form-input">
+              <option>XII – Science A</option><option>XII – Science B</option><option>XII – Commerce</option><option>XI – Science</option><option>X – Arts</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Subject</label>
+            <select class="form-input">
+              <option>Physics</option><option>Chemistry</option><option>Mathematics</option><option>Biology</option><option>English</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" style="align-self:flex-end">Load Students</button>
+        </div>
+      </div>
+
+      <div class="att-summary-row">
+        <div class="att-stat-mini att-present"><i class="fas fa-check-circle"></i><div><strong id="att-present-count">38</strong><span>Present</span></div></div>
+        <div class="att-stat-mini att-absent"><i class="fas fa-times-circle"></i><div><strong id="att-absent-count">4</strong><span>Absent</span></div></div>
+        <div class="att-stat-mini att-late"><i class="fas fa-clock"></i><div><strong id="att-late-count">2</strong><span>Late</span></div></div>
+        <div class="att-stat-mini att-leave"><i class="fas fa-calendar-times"></i><div><strong>1</strong><span>On Leave</span></div></div>
+      </div>
+
+      <div class="card">
+        <table class="data-table">
+          <thead><tr><th>#</th><th>Student</th><th>Roll No.</th><th>Status</th><th>Remarks</th></tr></thead>
+          <tbody id="attendance-tbody">
+            <!-- Injected by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========== EXAM SCHEDULE ========== -->
+    <section class="page" id="page-exams">
+      <div class="page-header">
+        <div><h1 class="page-title">Exam Schedule</h1><p class="page-subtitle">Upcoming assessments and timetables</p></div>
+        <div class="page-actions">
+          <button class="btn btn-outline"><i class="fas fa-print"></i> Print Schedule</button>
+          <button class="btn btn-primary" onclick="openModal('addExamModal')"><i class="fas fa-plus"></i> Add Exam</button>
+        </div>
+      </div>
+
+      <div class="exam-filters card" style="padding:1rem 1.5rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
+        <select class="select-sm"><option>All Classes</option><option>XII Science</option><option>XI Commerce</option><option>X Arts</option></select>
+        <select class="select-sm"><option>All Months</option><option>March 2025</option><option>April 2025</option><option>May 2025</option></select>
+        <select class="select-sm"><option>All Types</option><option>Unit Test</option><option>Mid-Term</option><option>Final</option></select>
+        <input type="text" class="table-search" placeholder="Search exams..." style="flex:1;min-width:180px"/>
+      </div>
+
+      <div class="exam-grid" id="exam-grid">
+        <!-- Injected by JS -->
+      </div>
+    </section>
+
+    <!-- ========== CLASS SCHEDULE ========== -->
+    <section class="page" id="page-classes">
+      <div class="page-header">
+        <div><h1 class="page-title">Class Schedule</h1><p class="page-subtitle">Weekly timetable for all classes</p></div>
+        <div class="page-actions">
+          <select class="select-sm">
+            <option>XII – Science A</option><option>XII – Science B</option><option>XI – Commerce</option><option>X – Arts</option>
+          </select>
+          <button class="btn btn-primary"><i class="fas fa-download"></i> Download</button>
+        </div>
+      </div>
+      <div class="card timetable-card">
+        <div class="timetable-wrap" id="timetable-wrap">
+          <!-- Injected by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== CAFETERIA ========== -->
+    <section class="page" id="page-cafeteria">
+      <div class="page-header">
+        <div><h1 class="page-title">Cafeteria</h1><p class="page-subtitle">Today's menu & meal tracking</p></div>
+        <div class="page-actions">
+          <button class="btn btn-outline"><i class="fas fa-edit"></i> Edit Menu</button>
+          <button class="btn btn-primary"><i class="fas fa-plus"></i> Add Item</button>
+        </div>
+      </div>
+      <div class="cafeteria-layout">
+        <div class="caf-menu">
+          <div class="card">
+            <div class="card-header"><h3>🍽️ Today's Menu</h3><span class="chip green">Open Until 3PM</span></div>
+            <div class="menu-tabs" id="menu-tabs">
+              <button class="menu-tab active" onclick="switchMenu('breakfast', this)">Breakfast</button>
+              <button class="menu-tab" onclick="switchMenu('lunch', this)">Lunch</button>
+              <button class="menu-tab" onclick="switchMenu('snacks', this)">Snacks</button>
+            </div>
+            <div class="menu-items" id="menu-items"></div>
+          </div>
+        </div>
+        <div class="caf-stats">
+          <div class="card">
+            <div class="card-header"><h3>Today's Stats</h3></div>
+            <div class="caf-stat-list">
+              <div class="caf-stat-item"><div class="caf-stat-icon" style="background:#6366f120;color:#6366f1"><i class="fas fa-users"></i></div><div><div class="caf-stat-val">1,204</div><div class="caf-stat-lbl">Students Served</div></div></div>
+              <div class="caf-stat-item"><div class="caf-stat-icon" style="background:#10b98120;color:#10b981"><i class="fas fa-rupee-sign"></i></div><div><div class="caf-stat-val">₹38,420</div><div class="caf-stat-lbl">Revenue Today</div></div></div>
+              <div class="caf-stat-item"><div class="caf-stat-icon" style="background:#f59e0b20;color:#f59e0b"><i class="fas fa-utensils"></i></div><div><div class="caf-stat-val">6</div><div class="caf-stat-lbl">Menu Items</div></div></div>
+              <div class="caf-stat-item"><div class="caf-stat-icon" style="background:#f43f5e20;color:#f43f5e"><i class="fas fa-star"></i></div><div><div class="caf-stat-val">4.3/5</div><div class="caf-stat-lbl">Avg Rating</div></div></div>
+            </div>
+          </div>
+          <div class="card" style="margin-top:1.2rem">
+            <div class="card-header"><h3>Meal Cards</h3><button class="btn btn-sm">Manage</button></div>
+            <div class="meal-card-list">
+              <div class="meal-card-item"><div class="avatar-sm" style="background:#6366f1">RK</div><div><div class="s-name">Rahul Kumar</div><div class="s-id">Balance: ₹480</div></div><span class="badge-status green">Active</span></div>
+              <div class="meal-card-item"><div class="avatar-sm" style="background:#f43f5e">PS</div><div><div class="s-name">Priya Sharma</div><div class="s-id">Balance: ₹120</div></div><span class="badge-status yellow">Low</span></div>
+              <div class="meal-card-item"><div class="avatar-sm" style="background:#0ea5e9">AM</div><div><div class="s-name">Arjun Mehta</div><div class="s-id">Balance: ₹0</div></div><span class="badge-status red">Empty</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== RESULTS ========== -->
+    <section class="page" id="page-results">
+      <div class="page-header">
+        <div><h1 class="page-title">Academic Results</h1><p class="page-subtitle">View & publish student performance</p></div>
+        <div class="page-actions">
+          <button class="btn btn-outline"><i class="fas fa-upload"></i> Import Marks</button>
+          <button class="btn btn-primary"><i class="fas fa-bullhorn"></i> Publish Results</button>
+        </div>
+      </div>
+      <div class="results-layout">
+        <div class="card wide-card">
+          <div class="card-header"><h3>Class Performance – XII Science A</h3><span class="chip">Mid-Term 2025</span></div>
+          <table class="data-table">
+            <thead><tr><th>Student</th><th>Physics</th><th>Chemistry</th><th>Math</th><th>Biology</th><th>English</th><th>Total</th><th>Grade</th></tr></thead>
+            <tbody>
+              <tr><td><div class="student-cell"><div class="avatar-sm" style="background:#6366f1">RK</div><div class="s-name">Rahul Kumar</div></div></td><td>88</td><td>91</td><td>95</td><td>82</td><td>79</td><td><strong>435/500</strong></td><td><span class="badge-status green">A+</span></td></tr>
+              <tr><td><div class="student-cell"><div class="avatar-sm" style="background:#f43f5e">PS</div><div class="s-name">Priya Sharma</div></div></td><td>76</td><td>84</td><td>89</td><td>90</td><td>88</td><td><strong>427/500</strong></td><td><span class="badge-status green">A</span></td></tr>
+              <tr><td><div class="student-cell"><div class="avatar-sm" style="background:#10b981">SG</div><div class="s-name">Sneha Gupta</div></div></td><td>62</td><td>70</td><td>74</td><td>68</td><td>83</td><td><strong>357/500</strong></td><td><span class="badge-status yellow">B</span></td></tr>
+              <tr><td><div class="student-cell"><div class="avatar-sm" style="background:#0ea5e9">AM</div><div class="s-name">Arjun Mehta</div></div></td><td>55</td><td>60</td><td>58</td><td>63</td><td>72</td><td><strong>308/500</strong></td><td><span class="badge-status red">C</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card narrow-card">
+          <div class="card-header"><h3>Subject Averages</h3></div>
+          <div class="subject-bars">
+            <div class="sub-bar-item"><span>Physics</span><div class="att-track"><div class="att-fill" style="width:73%;background:#6366f1"></div></div><strong>73%</strong></div>
+            <div class="sub-bar-item"><span>Chemistry</span><div class="att-track"><div class="att-fill" style="width:79%;background:#10b981"></div></div><strong>79%</strong></div>
+            <div class="sub-bar-item"><span>Mathematics</span><div class="att-track"><div class="att-fill" style="width:85%;background:#6366f1"></div></div><strong>85%</strong></div>
+            <div class="sub-bar-item"><span>Biology</span><div class="att-track"><div class="att-fill" style="width:77%;background:#f59e0b"></div></div><strong>77%</strong></div>
+            <div class="sub-bar-item"><span>English</span><div class="att-track"><div class="att-fill" style="width:81%;background:#10b981"></div></div><strong>81%</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== LIBRARY ========== -->
+    <section class="page" id="page-library">
+      <div class="page-header">
+        <div><h1 class="page-title">Library</h1><p class="page-subtitle">Book inventory & borrowing system</p></div>
+        <div class="page-actions">
+          <button class="btn btn-outline"><i class="fas fa-qrcode"></i> Scan Book</button>
+          <button class="btn btn-primary"><i class="fas fa-plus"></i> Add Book</button>
+        </div>
+      </div>
+      <div class="stats-grid" style="grid-template-columns:repeat(4,1fr)">
+        <div class="stat-card stat-blue"><div class="stat-icon"><i class="fas fa-book"></i></div><div class="stat-content"><div class="stat-value">12,840</div><div class="stat-label">Total Books</div></div></div>
+        <div class="stat-card stat-green"><div class="stat-icon"><i class="fas fa-book-open"></i></div><div class="stat-content"><div class="stat-value">1,203</div><div class="stat-label">Borrowed</div></div></div>
+        <div class="stat-card stat-orange"><div class="stat-icon"><i class="fas fa-exclamation-circle"></i></div><div class="stat-content"><div class="stat-value">87</div><div class="stat-label">Overdue</div></div></div>
+        <div class="stat-card stat-purple"><div class="stat-icon"><i class="fas fa-undo"></i></div><div class="stat-content"><div class="stat-value">34</div><div class="stat-label">Due Today</div></div></div>
+      </div>
+      <div class="card" style="margin-top:1.5rem">
+        <div class="card-header"><h3>Recently Borrowed</h3><input type="text" class="table-search" style="width:220px" placeholder="Search books..."/></div>
+        <table class="data-table">
+          <thead><tr><th>Book Title</th><th>Author</th><th>Student</th><th>Issued On</th><th>Due Date</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Concepts of Physics Vol. I</td><td>H.C. Verma</td><td>Rahul Kumar</td><td>Mar 1</td><td>Mar 15</td><td><span class="badge-status red">Overdue</span></td></tr>
+            <tr><td>Organic Chemistry</td><td>O.P. Tandon</td><td>Priya Sharma</td><td>Mar 5</td><td>Mar 19</td><td><span class="badge-status green">On Time</span></td></tr>
+            <tr><td>To Kill a Mockingbird</td><td>Harper Lee</td><td>Arjun Mehta</td><td>Mar 10</td><td>Mar 24</td><td><span class="badge-status green">On Time</span></td></tr>
+            <tr><td>Mathematics NCERT XII</td><td>NCERT</td><td>Sneha Gupta</td><td>Mar 11</td><td>Mar 25</td><td><span class="badge-status green">On Time</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========== FEE MANAGEMENT ========== -->
+    <section class="page" id="page-fees">
+      <div class="page-header">
+        <div><h1 class="page-title">Fee Management</h1><p class="page-subtitle">Track and manage student fee collections</p></div>
+        <div class="page-actions">
+          <button class="btn btn-outline"><i class="fas fa-download"></i> Export</button>
+          <button class="btn btn-primary"><i class="fas fa-plus"></i> Record Payment</button>
+        </div>
+      </div>
+      <div class="stats-grid" style="grid-template-columns:repeat(4,1fr)">
+        <div class="stat-card stat-green"><div class="stat-icon"><i class="fas fa-check-circle"></i></div><div class="stat-content"><div class="stat-value">₹14.8L</div><div class="stat-label">Collected</div></div></div>
+        <div class="stat-card stat-orange"><div class="stat-icon"><i class="fas fa-clock"></i></div><div class="stat-content"><div class="stat-value">₹6.4L</div><div class="stat-label">Pending</div></div></div>
+        <div class="stat-card stat-red"><div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-content"><div class="stat-value">₹1.2L</div><div class="stat-label">Overdue</div></div></div>
+        <div class="stat-card stat-blue"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-content"><div class="stat-value">320</div><div class="stat-label">Due Payments</div></div></div>
+      </div>
+      <div class="card" style="margin-top:1.5rem">
+        <div class="card-header"><h3>Fee Transactions</h3><div class="table-filters"><select class="select-sm"><option>All</option><option>Paid</option><option>Pending</option><option>Overdue</option></select></div></div>
+        <table class="data-table">
+          <thead><tr><th>Student</th><th>Class</th><th>Fee Type</th><th>Amount</th><th>Due Date</th><th>Paid On</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><div class="student-cell"><div class="avatar-sm" style="background:#6366f1">RK</div><div class="s-name">Rahul Kumar</div></div></td><td>XII-A</td><td>Tuition</td><td>₹12,000</td><td>Mar 1</td><td>Feb 28</td><td><span class="badge-status green">Paid</span></td></tr>
+            <tr><td><div class="student-cell"><div class="avatar-sm" style="background:#f43f5e">PS</div><div class="s-name">Priya Sharma</div></div></td><td>XI-B</td><td>Tuition + Bus</td><td>₹15,500</td><td>Mar 1</td><td>–</td><td><span class="badge-status yellow">Pending</span></td></tr>
+            <tr><td><div class="student-cell"><div class="avatar-sm" style="background:#0ea5e9">AM</div><div class="s-name">Arjun Mehta</div></div></td><td>X-C</td><td>Tuition</td><td>₹12,000</td><td>Feb 15</td><td>–</td><td><span class="badge-status red">Overdue</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========== NOTIFICATIONS ========== -->
+    <section class="page" id="page-notifications">
+      <div class="page-header">
+        <div><h1 class="page-title">Notifications</h1><p class="page-subtitle">All system alerts and announcements</p></div>
+        <div class="page-actions"><button class="btn btn-outline">Mark All Read</button></div>
+      </div>
+      <div class="card">
+        <div class="notif-list" id="notif-list">
+          <!-- Injected by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SETTINGS ========== -->
+    <section class="page" id="page-settings">
+      <div class="page-header">
+        <div><h1 class="page-title">Settings</h1><p class="page-subtitle">System configuration & preferences</p></div>
+        <div class="page-actions"><button class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button></div>
+      </div>
+      <div class="settings-layout">
+        <div class="settings-tabs">
+          <button class="settings-tab active" onclick="switchSettings('profile', this)"><i class="fas fa-user"></i> Profile</button>
+          <button class="settings-tab" onclick="switchSettings('institution', this)"><i class="fas fa-school"></i> Institution</button>
+          <button class="settings-tab" onclick="switchSettings('academic', this)"><i class="fas fa-graduation-cap"></i> Academic</button>
+          <button class="settings-tab" onclick="switchSettings('notifications', this)"><i class="fas fa-bell"></i> Notifications</button>
+          <button class="settings-tab" onclick="switchSettings('security', this)"><i class="fas fa-shield-alt"></i> Security</button>
+        </div>
+        <div class="settings-panel card" id="settings-content">
+          <div class="settings-section" id="s-profile">
+            <h3>Admin Profile</h3>
+            <div class="settings-avatar-row">
+              <div class="settings-avatar">AK</div>
+              <button class="btn btn-outline btn-sm">Change Photo</button>
+            </div>
+            <div class="form-grid">
+              <div class="form-group"><label>Full Name</label><input class="form-input" value="Admin Kumar"/></div>
+              <div class="form-group"><label>Email</label><input class="form-input" value="admin@knowu.edu.in"/></div>
+              <div class="form-group"><label>Phone</label><input class="form-input" value="+91 98765 43210"/></div>
+              <div class="form-group"><label>Role</label><input class="form-input" value="Super Admin" disabled/></div>
+            </div>
+          </div>
+          <div class="settings-section hidden" id="s-institution">
+            <h3>Institution Details</h3>
+            <div class="form-grid">
+              <div class="form-group"><label>Institution Name</label><input class="form-input" value="KnowU Academy"/></div>
+              <div class="form-group"><label>Established Year</label><input class="form-input" value="2005"/></div>
+              <div class="form-group"><label>Board</label><select class="form-input"><option>CBSE</option><option>ICSE</option><option>State Board</option></select></div>
+              <div class="form-group"><label>City</label><input class="form-input" value="Gurugram, Haryana"/></div>
+              <div class="form-group full-width"><label>Address</label><textarea class="form-input" rows="2">Sector 42, Gurugram, Haryana – 122001</textarea></div>
+            </div>
+          </div>
+          <div class="settings-section hidden" id="s-academic">
+            <h3>Academic Configuration</h3>
+            <div class="form-grid">
+              <div class="form-group"><label>Academic Year</label><input class="form-input" value="2024–2025"/></div>
+              <div class="form-group"><label>Grading System</label><select class="form-input"><option>Letter Grade (A–F)</option><option>Percentage</option><option>GPA (4.0)</option></select></div>
+              <div class="form-group"><label>Min. Attendance %</label><input class="form-input" type="number" value="75"/></div>
+              <div class="form-group"><label>School Timings</label><input class="form-input" value="08:00 AM – 04:30 PM"/></div>
+            </div>
+          </div>
+          <div class="settings-section hidden" id="s-notifications">
+            <h3>Notification Preferences</h3>
+            <div class="toggle-list">
+              <div class="toggle-item"><div><strong>Attendance Alerts</strong><p>Notify when attendance drops below threshold</p></div><label class="toggle-switch"><input type="checkbox" checked/><span class="slider"></span></label></div>
+              <div class="toggle-item"><div><strong>Fee Reminders</strong><p>Send reminders for overdue fees</p></div><label class="toggle-switch"><input type="checkbox" checked/><span class="slider"></span></label></div>
+              <div class="toggle-item"><div><strong>Exam Notifications</strong><p>Alert before scheduled exams</p></div><label class="toggle-switch"><input type="checkbox" checked/><span class="slider"></span></label></div>
+              <div class="toggle-item"><div><strong>Result Notifications</strong><p>Notify when results are published</p></div><label class="toggle-switch"><input type="checkbox"/><span class="slider"></span></label></div>
+            </div>
+          </div>
+          <div class="settings-section hidden" id="s-security">
+            <h3>Security Settings</h3>
+            <div class="form-grid">
+              <div class="form-group"><label>Current Password</label><input class="form-input" type="password" placeholder="••••••••"/></div>
+              <div class="form-group"><label>New Password</label><input class="form-input" type="password" placeholder="••••••••"/></div>
+              <div class="form-group"><label>Confirm Password</label><input class="form-input" type="password" placeholder="••••••••"/></div>
+            </div>
+            <div class="toggle-list" style="margin-top:1rem">
+              <div class="toggle-item"><div><strong>Two-Factor Authentication</strong><p>Add extra layer of security</p></div><label class="toggle-switch"><input type="checkbox"/><span class="slider"></span></label></div>
+              <div class="toggle-item"><div><strong>Session Timeout (30 min)</strong><p>Auto logout on inactivity</p></div><label class="toggle-switch"><input type="checkbox" checked/><span class="slider"></span></label></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Add Student Modal -->
+<div class="modal-overlay hidden" id="addStudentModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Add New Student</h3>
+      <button class="modal-close" onclick="closeModal('addStudentModal')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label>First Name</label><input class="form-input" placeholder="e.g. Rahul"/></div>
+        <div class="form-group"><label>Last Name</label><input class="form-input" placeholder="e.g. Kumar"/></div>
+        <div class="form-group"><label>Date of Birth</label><input class="form-input" type="date"/></div>
+        <div class="form-group"><label>Gender</label><select class="form-input"><option>Male</option><option>Female</option><option>Other</option></select></div>
+        <div class="form-group"><label>Class</label><select class="form-input"><option>XII – Science A</option><option>XII – Science B</option><option>XI – Science</option><option>XI – Commerce</option><option>X – Arts</option></select></div>
+        <div class="form-group"><label>Phone</label><input class="form-input" placeholder="+91 XXXXX XXXXX"/></div>
+        <div class="form-group full-width"><label>Address</label><textarea class="form-input" rows="2" placeholder="Full address"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('addStudentModal')">Cancel</button>
+      <button class="btn btn-primary">Add Student</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Exam Modal -->
+<div class="modal-overlay hidden" id="addExamModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Schedule New Exam</h3>
+      <button class="modal-close" onclick="closeModal('addExamModal')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label>Exam Title</label><input class="form-input" placeholder="e.g. Physics Unit Test 3"/></div>
+        <div class="form-group"><label>Subject</label><select class="form-input"><option>Physics</option><option>Chemistry</option><option>Math</option><option>Biology</option><option>English</option></select></div>
+        <div class="form-group"><label>Class</label><select class="form-input"><option>XII – Science A</option><option>XII – Science B</option><option>XI – Commerce</option><option>X – Arts</option></select></div>
+        <div class="form-group"><label>Exam Type</label><select class="form-input"><option>Unit Test</option><option>Mid-Term</option><option>Final</option><option>Practical</option></select></div>
+        <div class="form-group"><label>Date</label><input class="form-input" type="date"/></div>
+        <div class="form-group"><label>Time</label><input class="form-input" type="time"/></div>
+        <div class="form-group"><label>Duration (mins)</label><input class="form-input" type="number" value="90"/></div>
+        <div class="form-group"><label>Room / Hall</label><input class="form-input" placeholder="e.g. Room 201"/></div>
+        <div class="form-group"><label>Max Marks</label><input class="form-input" type="number" value="100"/></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('addExamModal')">Cancel</button>
+      <button class="btn btn-primary">Schedule Exam</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
